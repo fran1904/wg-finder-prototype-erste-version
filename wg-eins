@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Düsselthaler Straße, Düsseldorf - WG-FINDER Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --orange: #f89a28;
+      --blue: #0077c8;
+      --grey-bg: #f3f4f7;
+      --border-color: #d5d7dd;
+      --text-main: #222;
+      --text-muted: #666;
+      --bg-card: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: var(--grey-bg);
+      color: var(--text-main);
+    }
+
+    a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* HEADER */
+
+    .top-bar {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .top-bar-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.6rem 1.25rem;
+    }
+
+    .logo {
+      font-weight: 800;
+      color: #ff6600;
+      font-size: 1.25rem;
+      letter-spacing: 0.04em;
+    }
+
+    .logo span {
+      color: #333;
+      font-weight: 700;
+    }
+
+    .main-nav {
+      display: flex;
+      gap: 1.1rem;
+      font-size: 0.9rem;
+      align-items: center;
+    }
+
+    .main-nav a {
+      color: #444;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .user-nav {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.85rem;
+      align-items: center;
+    }
+
+    .user-nav button {
+      border-radius: 4px;
+      border: 1px solid var(--border-color);
+      background: #ffffff;
+      padding: 0.25rem 0.7rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    /* PAGE LAYOUT */
+
+    .page-wrapper {
+      max-width: 1180px;
+      margin: 1.25rem auto 2.4rem;
+      padding: 0 1.25rem 2rem;
+      display: grid;
+      grid-template-columns: 390px minmax(0, 1fr);
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 960px) {
+      .page-wrapper {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .main-column {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      padding: 1.25rem 1.5rem;
+    }
+
+    /* SIDEBAR */
+
+    .sidebar-card {
+      background: var(--bg-card);
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+      font-size: 0.85rem;
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .profile-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #e4e6ec;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #555;
+      font-size: 0.8rem;
+    }
+
+    .profile-name {
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+      font-size: 1rem;
+    }
+
+    .profile-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.15rem;
+      font-size: 0.7rem;
+      color: #2e7d32;
+      margin-top: 0.15rem;
+    }
+
+    .sidebar-card .label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .sidebar-actions {
+      margin-top: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .btn-primary,
+    .btn-outline {
+      display: inline-block;
+      text-align: center;
+      padding: 0.4rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      border: 1px solid transparent;
+      font-weight: 600;
+    }
+
+    .btn-primary {
+      background: var(--orange);
+      border-color: var(--orange);
+      color: #ffffff;
+    }
+
+    .btn-outline {
+      background: #ffffff;
+      border-color: var(--border-color);
+      color: #333;
+    }
+
+    .sidebar-meta {
+      margin-top: 0.4rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .sidebar-note {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 0.6rem;
+    }
+
+    /* HERO CARD (TITLE + IMAGE + DARK BAR) */
+
+    .hero-card {
+      padding: 1.25rem 1.5rem 0.5rem;
+    }
+
+    .hero-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .hero-icon {
+      font-size: 1.2rem;
+    }
+
+    .hero-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .hero-image-wrapper {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #dfe2ea;
+      height: 280px;
+    }
+
+    .hero-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .hero-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 38px;
+      height: 62px;
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.2rem;
+      cursor: default;
+      user-select: none;
+    }
+
+    .hero-arrow.left {
+      left: 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .hero-arrow.right {
+      right: 0;
+      border-radius: 8px 0 0 8px;
+    }
+
+    .hero-photo-badge {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.8rem;
+      color: #333;
+    }
+
+    .hero-photo-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 2px;
+      background: #f0f0f0;
+    }
+
+    .hero-ad-number {
+      margin-top: 0.4rem;
+      font-size: 0.76rem;
+      color: #333;
+    }
+
+    .hero-meta-bar {
+      margin-top: 0.7rem;
+      margin-left: -1.5rem;
+      margin-right: -1.5rem;
+      background: #3f3f3f;
+      color: #fff;
+      padding: 0.8rem 1.5rem;
+      border-radius: 0 0 8px 8px;
+      display: flex;
+      justify-content: center;
+      gap: 6rem;
+      font-size: 0.98rem;
+    }
+
+    .hero-meta-bar span {
+      white-space: nowrap;
+    }
+
+    .hero-meta-label {
+      opacity: 0.9;
+      margin-right: 0.25rem;
+    }
+
+    .hero-meta-value {
+      font-weight: 700;
+    }
+
+    /* SIMPLE CARD HEADINGS */
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+    }
+
+    /* KOSTEN CARD */
+
+    .kosten-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      font-size: 0.95rem;
+    }
+
+    .kosten-grid dt {
+      font-weight: 400;
+      margin-bottom: 0.25rem;
+    }
+
+    .kosten-grid dd {
+      margin: 0 0 0.4rem;
+      font-weight: 500;
+    }
+
+    /* ADRESSE / VERF CARD */
+
+    .address-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 2rem;
+      font-size: 0.95rem;
+    }
+
+    .address-block-title {
+      font-weight: 600;
+      font-size: 1.05rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .address-grid p {
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .address-grid dl {
+      margin: 0;
+    }
+
+    .address-grid dt {
+      font-weight: 400;
+      margin-bottom: 0.25rem;
+    }
+
+    .address-grid dd {
+      margin: 0 0 0.4rem;
+      font-weight: 500;
+    }
+
+    .address-link {
+      margin-top: 0.8rem;
+      font-size: 0.9rem;
+    }
+
+    /* ZIMMER CARD */
+
+    .room-text {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-top: 0.4rem;
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+
+    .translation-info {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* MATCH WIDGET CARD */
+
+    .match-widget-box > p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 0;
+      margin-bottom: 0.6rem;
+    }
+
+    .widget-placeholder {
+      width: 100%;
+      min-height: 260px;
+      border-radius: 8px;
+      border: 1px solid #d8dcec;
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      color: #777;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    /* WG-DETAILS CARD */
+
+    .wg-details {
+      font-size: 0.95rem;
+    }
+
+    .wg-details h3 {
+      margin: 0.3rem 0;
+      font-size: 1.05rem;
+    }
+
+    .wg-details ul {
+      margin: 0 0 1rem;
+      padding-left: 1.2rem;
+    }
+
+    /* ANGABEN ZUM OBJEKT */
+
+    .object-icons-row {
+      display: flex;
+      gap: 3rem;
+      margin-top: 1.2rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .object-icon {
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .object-icon-circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: #eeeeee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 0.5rem;
+      font-size: 2rem;
+    }
+
+    /* MAP CARD */
+
+    .map-placeholder {
+      height: 260px;
+      background: #dfe2ea;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      color: #555;
+      text-align: center;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .map-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* FOOTER */
+
+    .footer {
+      border-top: 1px solid var(--border-color);
+      background: #ffffff;
+      padding: 1.5rem 0 2rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .footer-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    .footer-links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.3rem 2rem;
+    }
+
+    .footer-bottom {
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 700px) {
+      .kosten-grid,
+      .address-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-meta-bar {
+        flex-direction: column;
+        gap: 0.4rem;
+        align-items: flex-start;
+      }
+      .main-nav {
+        display: none; /* hide nav on tiny screens to avoid wrapping chaos */
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="top-bar">
+    <div class="top-bar-inner">
+      <div class="logo">WG-<span>FINDER</span></div>
+      <nav class="main-nav">
+        <a href="#">Angebote &amp; Gesuche</a>
+        <a href="wg1.html">WG&nbsp;1</a>
+        <a href="wg2.html">WG&nbsp;2</a>
+        <a href="wg3.html">WG&nbsp;3</a>
+      </nav>
+      <div class="user-nav">
+        <a href="#">Mein Konto</a>
+        <button>Einloggen</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- PAGE CONTENT -->
+  <main class="page-wrapper">
+    <!-- SIDEBAR -->
+    <aside>
+      <div class="sidebar-card">
+        <div class="profile-header">
+          <div class="profile-avatar">HA</div>
+          <div>
+            <div class="profile-name">HousingAnywhere</div>
+            <div class="profile-badge">✔ Verifizierter Anbieter</div>
+            <div class="sidebar-meta">Mitglied seit Juli 2023</div>
+          </div>
+        </div>
+
+        <div class="label">Aktionen</div>
+        <div class="sidebar-actions">
+          <button class="btn-primary">Buchungsanfrage</button>
+          <button class="btn-outline">Favorisieren</button>
+          <button class="btn-outline">Notiz erstellen</button>
+          <button class="btn-outline">Drucken</button>
+        </div>
+
+        <p class="sidebar-note">
+          Diese Anzeige ist Teil eines <strong>WG-FINDER</strong>-Prototyps.
+          Alle Inhalte sind fiktiv und dienen nur Testzwecken.
+        </p>
+      </div>
+    </aside>
+
+    <!-- MAIN COLUMN -->
+    <section class="main-column">
+
+      <!-- HERO CARD -->
+      <article class="card hero-card">
+        <div class="hero-header">
+          <div class="hero-icon">🏙️</div>
+          <h1 class="hero-title">Düsselthaler Straße, Düsseldorf</h1>
+        </div>
+
+        <div class="hero-image-wrapper">
+          <!-- Carousel image from Google Drive -->
+          <img
+            src="https://drive.google.com/uc?export=view&id=1i3dVrqmIHEL-g_EsAQ9a4sTW6zBnBKZj"
+            alt="Zimmeransicht – Beispielsfoto"
+            class="hero-image"
+          />
+          <div class="hero-arrow left">&#x276E;</div>
+          <div class="hero-arrow right">&#x276F;</div>
+
+          <div class="hero-photo-badge">
+            <div class="hero-photo-icon"></div>
+            <span>4 Fotos</span>
+          </div>
+        </div>
+
+        <div class="hero-ad-number">
+          Anzeigenummer: 12277873
+        </div>
+
+        <div class="hero-meta-bar">
+          <span>
+            <span class="hero-meta-label">Zimmergröße :</span>
+            <span class="hero-meta-value">10m²</span>
+          </span>
+          <span>
+            <span class="hero-meta-label">Gesamtmiete :</span>
+            <span class="hero-meta-value">500€</span>
+          </span>
+        </div>
+      </article>
+
+      <!-- KOSTEN CARD -->
+      <section class="card">
+        <h2 class="card-title">Kosten</h2>
+        <dl class="kosten-grid">
+          <div>
+            <dt>Miete:</dt>
+            <dd>500€</dd>
+            <dt>Nebenkosten: ⓘ</dt>
+            <dd>0€</dd>
+            <dt>Sonstige Kosten:</dt>
+            <dd>n.a.</dd>
+          </div>
+          <div>
+            <dt>Kaution:</dt>
+            <dd>n.a.</dd>
+            <dt>Ablösevereinbarung:</dt>
+            <dd>n.a.</dd>
+            <dt>SCHUFA-Auskunft:</dt>
+            <dd><a href="#">In 3 Minuten bereit</a></dd>
+          </div>
+        </dl>
+      </section>
+
+      <!-- ADRESSE + VERF CARD -->
+      <section class="card">
+        <div class="address-grid">
+          <div>
+            <div class="address-block-title">Adresse</div>
+            <p>Düsselthaler Straße<br />40211 Düsseldorf Pempelfort</p>
+          </div>
+          <div>
+            <div class="address-block-title">Verfügbarkeit</div>
+            <dl>
+              <dt>frei ab:</dt>
+              <dd><strong>01.10.2025</strong></dd>
+              <dt>Online:</dt>
+              <dd style="color:#888;">24.09.2025</dd>
+            </dl>
+          </div>
+        </div>
+        <div class="address-link">
+          <a href="#">Zur Website</a>
+        </div>
+      </section>
+
+      <!-- ZIMMER CARD -->
+      <section class="card">
+        <h2 class="card-title">Zimmer</h2>
+        <p class="room-text">
+          Geteilte Wohnung, 4 verschiedene Zimmer, Gemeinschaftsküche und Bad,
+          zentrale Lage, 5. Stock, kein Aufzug. Miete beinhaltet Strom, Internet
+          und zweiwöchentliche Reinigung von Küche, Flur und Bad.
+        </p>
+        <div class="translation-info">
+          Text automatisch übersetzt – <a href="#">Original anzeigen</a>
+        </div>
+      </section>
+
+      <!-- MATCH WIDGET CARD (YOUR CODEPEN GOES HERE) -->
+      <section class="card">
+        <h2 class="card-title">WG-FINDER – Profilcheck &amp; Match</h2>
+        <div class="match-widget-box">
+          <p>
+            Hier kannst du testen, wie gut du zu dieser WG passt. Das folgende
+            Widget ist ein Prototyp und basiert auf deinen zuvor angegebenen
+            Präferenzen.
+          </p>
+
+          <!-- Replace this div with your CodePen <iframe> -->
+          <div class="widget-placeholder">
+            <p>
+              <strong>Widget-Platzhalter</strong><br /><br />
+              Ersetze dieses Element durch den CodePen-Embed deines
+              Kompatibilitäts-Widgets.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- WG-DETAILS CARD -->
+      <section class="card wg-details">
+        <h2 class="card-title">WG-Details</h2>
+
+        <h3>Die WG:</h3>
+        <ul>
+          <li>10m² Zimmer in 2er WG</li>
+          <li>Wohnungsgröße: 95m²</li>
+          <li>2er WG</li>
+          <li>Rauchen nicht erwünscht</li>
+          <li>keine Zweck-WG</li>
+        </ul>
+
+        <h3>Gesucht wird:</h3>
+        <ul>
+          <li>Geschlecht egal</li>
+        </ul>
+      </section>
+
+      <!-- ANGABEN ZUM OBJEKT -->
+      <section class="card">
+        <h2 class="card-title">Angaben zum Objekt</h2>
+        <div class="object-icons-row">
+          <div class="object-icon">
+            <div class="object-icon-circle">🛏️</div>
+            <div>möbliert</div>
+          </div>
+          <div class="object-icon">
+            <div class="object-icon-circle">⬛</div>
+            <div>Laminat</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MAP CARD -->
+      <section class="card">
+        <h2 class="card-title">Lage</h2>
+        <div class="map-placeholder">
+          <!-- Map image from Google Drive -->
+          <img
+            src="https://drive.google.com/uc?export=view&id=1kzMvcjIJcJCm8-JLxNXU6T537l32G_KY"
+            alt="Kartenansicht – Beispielscreenshot"
+            class="map-image"
+          />
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links-grid">
+        <span>WG-Zimmer in Berlin</span>
+        <span>WG-Zimmer in München</span>
+        <span>WG-Zimmer in Köln</span>
+        <span>WG-Zimmer in Hamburg</span>
+        <span>WG-Zimmer in Leipzig</span>
+        <span>WG-Zimmer in Frankfurt</span>
+        <span>WG-Zimmer in Stuttgart</span>
+        <span>WG-Zimmer in Düsseldorf</span>
+      </div>
+      <div class="footer-bottom">
+        <p>
+          Hilfe &amp; Kontakt · Impressum · AGB · Datenschutz · Barrierefreiheit · Cookie-Einstellungen
+        </p>
+        <p>
+          Diese Seite ist eine nicht-kommerzielle Demo im Rahmen eines Hochschulprojekts
+          und steht in keinem Zusammenhang mit der Plattform WG-Gesucht.de.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // no JS needed right now; hook up interactions later if you want
+  </script>
+</body>
+</html>
