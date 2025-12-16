@@ -13,6 +13,24 @@
       --text-main: #222;
       --text-muted: #666;
       --bg-card: #ffffff;
+
+      /* widget vars */
+      --card-bg: #ffffff;
+      --border: #d4d8e3;
+      --text: #111827;
+      --muted: #6b7280;
+
+      --cl-green: #22c55e;
+      --cl-green-soft: rgba(34, 197, 94, 0.12);
+
+      --cl-amber: #f97316;
+      --cl-amber-soft: rgba(249, 115, 22, 0.12);
+
+      --cl-red: #ef4444;
+      --cl-red-soft: rgba(239, 68, 68, 0.12);
+
+      --user-marker: #8b5cf6; /* violet */
+      --wg-marker: #0ea5e9;   /* sky blue */
     }
 
     * {
@@ -418,28 +436,13 @@
       color: var(--text-muted);
     }
 
-    /* MATCH WIDGET CARD */
+    /* MATCH WIDGET CARD (generic text style) */
 
     .match-widget-box > p {
       font-size: 0.9rem;
       color: var(--text-muted);
       margin-top: 0;
       margin-bottom: 0.6rem;
-    }
-
-    .widget-placeholder {
-      width: 100%;
-      min-height: 260px;
-      border-radius: 8px;
-      border: 1px solid #d8dcec;
-      background: #f8fafc;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.85rem;
-      color: #777;
-      text-align: center;
-      padding: 1rem;
     }
 
     /* WG-DETAILS CARD */
@@ -548,10 +551,293 @@
         display: none; /* hide nav on tiny screens to avoid wrapping chaos */
       }
     }
+
+    /* === WIDGET STYLES (NO GLOBAL body/ * OVERRIDES) === */
+
+    .wg-widget {
+      margin: 0.6rem auto 0;
+      padding: 1rem 1.1rem 1.1rem;
+      background: var(--card-bg);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+
+    .wg-widget__eyebrow {
+      display: inline-block;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.15rem;
+    }
+
+    .wg-widget__title {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .wg-widget__subtitle {
+      margin: 0.35rem 0 0.9rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .wg-widget__overall {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      padding: 0.7rem 0.8rem;
+      border-radius: 8px;
+      background: #f9fafb;
+      border: 1px dashed var(--border);
+    }
+
+    .wg-widget__overall-circle {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--cl-amber-soft); /* default neutral */
+      border: 2px solid var(--cl-amber);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .wg-widget__overall-circle--strong {
+      border-color: var(--cl-green);
+      background: var(--cl-green-soft);
+    }
+
+    .wg-widget__overall-circle--medium {
+      border-color: var(--cl-amber);
+      background: var(--cl-amber-soft);
+    }
+
+    .wg-widget__overall-circle--weak {
+      border-color: var(--cl-red);
+      background: var(--cl-red-soft);
+    }
+
+    .wg-widget__overall-value {
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .wg-widget__overall-unit {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+
+    .wg-widget__overall-label {
+      font-size: 0.85rem;
+      color: var(--text);
+    }
+
+    .wg-widget__legend {
+      margin-top: 0.7rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      display: inline-block;
+    }
+
+    .legend-dot--strong {
+      background: var(--cl-green);
+    }
+
+    .legend-dot--medium {
+      background: var(--cl-amber);
+    }
+
+    .legend-dot--weak {
+      background: var(--cl-red);
+    }
+
+    .wg-widget__dimensions {
+      list-style: none;
+      margin: 0.9rem 0 0;
+      padding: 0;
+    }
+
+    .dimension {
+      padding: 0.6rem 0;
+      border-bottom: 1px solid #edf0f5;
+    }
+
+    .dimension:last-child {
+      border-bottom: none;
+    }
+
+    .dimension__top {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .dimension__label {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .dimension__tag {
+      font-size: 0.7rem;
+      padding: 0.05rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .dimension--strong .dimension__tag {
+      border-color: rgba(34, 197, 94, 0.3);
+      color: var(--cl-green);
+    }
+
+    .dimension--medium .dimension__tag {
+      border-color: rgba(249, 115, 22, 0.35);
+      color: #c0560d;
+    }
+
+    .dimension--weak .dimension__tag {
+      border-color: rgba(239, 68, 68, 0.3);
+      color: var(--cl-red);
+    }
+
+    .dimension__line {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.1rem;
+    }
+
+    .dimension__side-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.18rem;
+      white-space: nowrap;
+    }
+
+    .role-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      display: inline-block;
+    }
+
+    .role-dot--user {
+      background: var(--user-marker);
+    }
+
+    .role-dot--wg {
+      background: var(--wg-marker);
+    }
+
+    .dimension__track {
+      position: relative;
+      height: 18px;
+    }
+
+    .dimension__track-base {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 2px;
+      transform: translateY(-50%);
+      border-radius: 999px;
+      background: #e5e7eb;
+    }
+
+    .dimension--strong .dimension__track-base {
+      background: rgba(34, 197, 94, 0.22);
+    }
+
+    .dimension--medium .dimension__track-base {
+      background: rgba(249, 115, 22, 0.22);
+    }
+
+    .dimension--weak .dimension__track-base {
+      background: rgba(239, 68, 68, 0.22);
+    }
+
+    .dimension__segment {
+      position: absolute;
+      top: 50%;
+      height: 4px;
+      transform: translateY(-50%);
+      border-radius: 999px;
+      width: 0;
+      left: 0;
+      transition: width 0.45s ease-out, left 0.45s ease-out;
+    }
+
+    .dimension--strong .dimension__segment {
+      background: var(--cl-green);
+    }
+
+    .dimension--medium .dimension__segment {
+      background: var(--cl-amber);
+    }
+
+    .dimension--weak .dimension__segment {
+      background: var(--cl-red);
+    }
+
+    .dimension__marker {
+      position: absolute;
+      top: 50%;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      border: 2px solid #ffffff;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.7);
+      transition: left 0.45s ease-out;
+    }
+
+    .dimension__marker--user {
+      background: var(--user-marker);
+    }
+
+    .dimension__marker--wg {
+      background: var(--wg-marker);
+    }
+
+    .wg-widget__status {
+      margin-top: 0.9rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
   </style>
 </head>
 <body>
-  <!-- HEADER -->
+    <!-- HEADER (same as wg-eins, with Mein Profil linking to fragebogen.html) -->
   <header class="top-bar">
     <div class="top-bar-inner">
       <div class="logo">WG-<span>FINDER</span></div>
@@ -559,10 +845,10 @@
         <a href="#">Angebote &amp; Gesuche</a>
         <a href="wg-eins.html">WG&nbsp;Eins</a>
         <a href="wg-zwei.html">WG&nbsp;Zwei</a>
-        <a href="wg-drei.html">WG&nbspDrei</a>
+        <a href="wg-drei.html">WG&nbsp;Drei</a>
       </nav>
       <div class="user-nav">
-        <a href="#">Mein Konto</a>
+        <a href="fragebogen.html">Mein Profil</a>
         <button>Einloggen</button>
       </div>
     </div>
@@ -572,6 +858,7 @@
   <main class="page-wrapper">
     <!-- SIDEBAR -->
     <aside>
+      <!-- existing sidebar card -->
       <div class="sidebar-card">
         <div class="profile-header">
           <div class="profile-avatar">HA</div>
@@ -595,6 +882,52 @@
           Alle Inhalte sind fiktiv und dienen nur Testzwecken.
         </p>
       </div>
+
+           <!-- WG-Match Widget (ein einzelner Kasten im Sidebar) -->
+      <div class="wg-widget">
+        <header class="wg-widget__header">
+          <div class="wg-widget__title-row">
+            <h2 class="wg-widget__title" style="color: #8b5cf6;">WG-Matchcheck</h2>
+          </div>
+          <p class="wg-widget__subtitle">
+            Wie gut passen deine Präferenzen zu dieser WG?
+          </p>
+        </header>
+
+        <div class="wg-widget__overall">
+          <div class="wg-widget__overall-circle">
+            <span id="overallScore" class="wg-widget__overall-value">--</span>
+            <span class="wg-widget__overall-unit">%</span>
+          </div>
+          <div id="overallLabel" class="wg-widget__overall-label">
+            Noch keine Daten
+          </div>
+        </div>
+
+        <div class="wg-widget__legend">
+          <span class="legend-item">
+            <span class="legend-dot legend-dot--strong"></span>
+            starker Match
+          </span>
+          <span class="legend-item">
+            <span class="legend-dot legend-dot--medium"></span>
+            neutral
+          </span>
+          <span class="legend-item">
+            <span class="legend-dot legend-dot--weak"></span>
+            Konfliktpotenzial
+          </span>
+        </div>
+
+        <ul id="dimensionList" class="wg-widget__dimensions">
+          <!-- per-dimension rows will be injected here -->
+        </ul>
+
+        <p id="statusMessage" class="wg-widget__status">
+          Bitte fülle zuerst den Profilfragebogen aus.
+        </p>
+      </div>
+
     </aside>
 
     <!-- MAIN COLUMN -->
@@ -604,11 +937,10 @@
       <article class="card hero-card">
         <div class="hero-header">
           <div class="hero-icon">🏙️</div>
-          <h1 class="hero-title">Düsselthaler Straße, Düsseldorf</h1>
+          <h1 class="hero-title">Werstener Straße, Düsseldorf</h1>
         </div>
 
         <div class="hero-image-wrapper">
-          <!-- Carousel image from Google Drive -->
           <img
             src="WG-three.jpg"
             alt="Zimmeransicht – Beispielsfoto"
@@ -697,27 +1029,6 @@
         </div>
       </section>
 
-      <!-- MATCH WIDGET CARD (YOUR CODEPEN GOES HERE) -->
-      <section class="card">
-        <h2 class="card-title">WG-FINDER – Profilcheck &amp; Match</h2>
-        <div class="match-widget-box">
-          <p>
-            Hier kannst du testen, wie gut du zu dieser WG passt. Das folgende
-            Widget ist ein Prototyp und basiert auf deinen zuvor angegebenen
-            Präferenzen.
-          </p>
-
-          <!-- Replace this div with your CodePen <iframe> -->
-          <div class="widget-placeholder">
-            <p>
-              <strong>Widget-Platzhalter</strong><br /><br />
-              Ersetze dieses Element durch den CodePen-Embed deines
-              Kompatibilitäts-Widgets.
-            </p>
-          </div>
-        </div>
-      </section>
-
       <!-- WG-DETAILS CARD -->
       <section class="card wg-details">
         <h2 class="card-title">WG-Details</h2>
@@ -756,7 +1067,6 @@
       <section class="card">
         <h2 class="card-title">Lage</h2>
         <div class="map-placeholder">
-          <!-- Map image from Google Drive -->
           <img
             src="wg-map.png"
             alt="Kartenansicht – Beispielscreenshot"
@@ -793,7 +1103,211 @@
   </footer>
 
   <script>
-    // no JS needed right now; hook up interactions later if you want
+    // Key must match the survey page
+    const STORAGE_KEY = "wgFinderSurveyV1";
+
+    // WG profile (1–10 for each question)
+    const WG_PROFILE = {
+      id: "WG-DREI",
+      name: "Düsselthaler Straße",
+      values: {
+        q1: 5, // Gemeinsam kochen
+        q2: 8, // Ruhige WG
+        q3: 8, // Besuch möglich
+        q4: 5, // Sauberkeit & Ordnung
+        q5: 2, // Gemeinsame Aktivitäten
+        q6: 2, // Privatsphäre
+        q7: 3  // Spontane Gäste
+      }
+    };
+
+    // Labels
+    const QUESTION_META = {
+      q1: { label: "Gemeinsam kochen" },
+      q2: { label: "Ruhige WG" },
+      q3: { label: "Besuch von Freund:innen" },
+      q4: { label: "Sauberkeit & Ordnung" },
+      q5: { label: "Gemeinsame Aktivitäten" },
+      q6: { label: "Privatsphäre & Rückzug" },
+      q7: { label: "Spontane Gäste" }
+    };
+
+    function classifyDifference(diff) {
+      if (diff <= 2) return "strong";
+      if (diff <= 4) return "medium";
+      return "weak";
+    }
+
+    function labelForClass(cls) {
+      if (cls === "strong") return "starker Match";
+      if (cls === "medium") return "neutral";
+      return "Konfliktpotenzial";
+    }
+
+    function scoreFromDiff(diff) {
+      const maxDiff = 9;
+      const clamped = Math.min(Math.max(diff, 0), maxDiff);
+      const score = 100 - (clamped / maxDiff) * 100;
+      return Math.round(score);
+    }
+
+    function labelForOverall(score) {
+      if (score > 66) return "Sehr guter Match mit dieser WG.";
+      if (score >= 33) return "Guter Match, ein paar Unterschiede.";
+      if (score > 0) return "Eher schwierig – prüfe die Details.";
+      return "Noch keine Daten.";
+    }
+
+    function classForOverall(score) {
+      if (score > 66) return "strong";
+      if (score >= 33) return "medium";
+      if (score > 0) return "weak";
+      return null;
+    }
+
+    function loadUserData() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (!parsed || !parsed.answers) return null;
+        return parsed.answers;
+      } catch (err) {
+        console.warn("Fehler beim Lesen aus localStorage:", err);
+        return null;
+      }
+    }
+
+    function valueToPercent(v) {
+      const value = Math.min(Math.max(v, 1), 10);
+      return ((value - 1) / 9) * 100;
+    }
+
+    function renderWidget() {
+      const answers = loadUserData();
+      const statusEl = document.getElementById("statusMessage");
+      const overallScoreEl = document.getElementById("overallScore");
+      const overallLabelEl = document.getElementById("overallLabel");
+      const overallCircleEl = document.querySelector(".wg-widget__overall-circle");
+      const dimensionListEl = document.getElementById("dimensionList");
+
+      const resetCircleClasses = () => {
+        overallCircleEl.classList.remove(
+          "wg-widget__overall-circle--strong",
+          "wg-widget__overall-circle--medium",
+          "wg-widget__overall-circle--weak"
+        );
+      };
+
+      if (!answers) {
+        overallScoreEl.textContent = "--";
+        overallLabelEl.textContent = "Noch keine Daten";
+        statusEl.textContent =
+          "Bitte fülle zuerst den Profilfragebogen aus. Danach aktualisiert sich dieser Bereich automatisch.";
+        resetCircleClasses();
+        return;
+      }
+
+      statusEl.textContent =
+        "";
+
+      const dimensions = [];
+
+      Object.keys(WG_PROFILE.values).forEach((qKey) => {
+        const userValueRaw = answers[qKey];
+        if (typeof userValueRaw !== "number") return;
+
+        const userValue = userValueRaw;
+        const wgValue = WG_PROFILE.values[qKey];
+        const diff = Math.abs(userValue - wgValue);
+        const cls = classifyDifference(diff);
+        const dimScore = scoreFromDiff(diff);
+        const label = QUESTION_META[qKey]?.label || qKey;
+
+        dimensions.push({
+          key: qKey,
+          label,
+          userValue,
+          wgValue,
+          diff,
+          cls,
+          dimScore
+        });
+      });
+
+      if (!dimensions.length) {
+        overallScoreEl.textContent = "--";
+        overallLabelEl.textContent = "Noch keine Daten";
+        statusEl.textContent =
+          "Keine auswertbaren Antworten gefunden. Bitte fülle den Fragebogen vollständig aus.";
+        resetCircleClasses();
+        return;
+      }
+
+      const sum = dimensions.reduce((acc, d) => acc + d.dimScore, 0);
+      const overallScore = Math.round(sum / dimensions.length);
+      overallScoreEl.textContent = overallScore;
+      overallLabelEl.textContent = labelForOverall(overallScore);
+
+      resetCircleClasses();
+      const overallClass = classForOverall(overallScore);
+      if (overallClass) {
+        overallCircleEl.classList.add(
+          `wg-widget__overall-circle--${overallClass}`
+        );
+      }
+
+      dimensionListEl.innerHTML = "";
+
+      dimensions.forEach((dim) => {
+        const li = document.createElement("li");
+        li.className = `dimension dimension--${dim.cls}`;
+
+        li.innerHTML = `
+          <div class="dimension__top">
+            <span class="dimension__label">${dim.label}</span>
+            <span class="dimension__tag">${labelForClass(dim.cls)}</span>
+          </div>
+          <div class="dimension__line">
+            <span class="dimension__side-label">
+              <span class="role-dot role-dot--user"></span>
+              Du: ${dim.userValue}
+            </span>
+            <div class="dimension__track">
+              <div class="dimension__track-base"></div>
+              <div class="dimension__segment"></div>
+              <div class="dimension__marker dimension__marker--user" title="Dein Wert"></div>
+              <div class="dimension__marker dimension__marker--wg" title="WG-Wert"></div>
+            </div>
+            <span class="dimension__side-label">
+              WG: ${dim.wgValue}
+              <span class="role-dot role-dot--wg"></span>
+            </span>
+          </div>
+        `;
+
+        const markerUser = li.querySelector(".dimension__marker--user");
+        const markerWg = li.querySelector(".dimension__marker--wg");
+        const segment = li.querySelector(".dimension__segment");
+
+        const userPos = valueToPercent(dim.userValue);
+        const wgPos = valueToPercent(dim.wgValue);
+
+        const leftPos = Math.min(userPos, wgPos);
+        const width = Math.abs(userPos - wgPos);
+
+        requestAnimationFrame(() => {
+          markerUser.style.left = `${userPos}%`;
+          markerWg.style.left = `${wgPos}%`;
+          segment.style.left = `${leftPos}%`;
+          segment.style.width = `${width}%`;
+        });
+
+        dimensionListEl.appendChild(li);
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", renderWidget);
   </script>
 </body>
 </html>
