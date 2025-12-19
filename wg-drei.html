@@ -1165,128 +1165,157 @@
       return ((value - 1) / 9) * 100;
     }
 
-    function renderWidget() {
-      const answers = loadUserData();
-      const statusEl = document.getElementById("statusMessage");
-      const overallScoreEl = document.getElementById("overallScore");
-      const overallLabelEl = document.getElementById("overallLabel");
-      const overallCircleEl = document.querySelector(".wg-widget__overall-circle");
-      const dimensionListEl = document.getElementById("dimensionList");
 
-      const resetCircleClasses = () => {
-        overallCircleEl.classList.remove(
-          "wg-widget__overall-circle--strong",
-          "wg-widget__overall-circle--medium",
-          "wg-widget__overall-circle--weak"
-        );
-      };
+function renderWidget() {
+  const answers = loadUserData();
 
-      if (!answers) {
-        overallScoreEl.textContent = "--";
-        overallLabelEl.textContent = "Noch keine Daten";
-        statusEl.textContent =
-          "Bitte fülle zuerst den Profilfragebogen aus. Danach aktualisiert sich dieser Bereich automatisch.";
-        resetCircleClasses();
-        return;
-      }
+  const statusEl = document.getElementById("statusMessage");
+  const dimensionListEl = document.getElementById("dimensionList");
 
+  // These may not exist if you removed the overall block from the HTML:
+  const overallScoreEl = document.getElementById("overallScore");
+  const overallLabelEl = document.getElementById("overallLabel");
+  const overallCircleEl = document.querySelector(".wg-widget__overall-circle");
+
+  const resetCircleClasses = () => {
+    if (!overallCircleEl) return;
+    overallCircleEl.classList.remove(
+      "wg-widget__overall-circle--strong",
+      "wg-widget__overall-circle--medium",
+      "wg-widget__overall-circle--weak"
+    );
+  };
+
+  // If the list container is missing, we can't render anything — fail gracefully.
+  if (!dimensionListEl) {
+    if (statusEl) statusEl.textContent = "Widget konnte nicht geladen werden (dimensionList fehlt im HTML).";
+    return;
+  }
+
+  // No user data yet
+  if (!answers) {
+    if (overallScoreEl) overallScoreEl.textContent = "--";
+    if (overallLabelEl) overallLabelEl.textContent = "Noch keine Daten";
+
+    if (statusEl) {
       statusEl.textContent =
-        "";
-
-      const dimensions = [];
-
-      Object.keys(WG_PROFILE.values).forEach((qKey) => {
-        const userValueRaw = answers[qKey];
-        if (typeof userValueRaw !== "number") return;
-
-        const userValue = userValueRaw;
-        const wgValue = WG_PROFILE.values[qKey];
-        const diff = Math.abs(userValue - wgValue);
-        const cls = classifyDifference(diff);
-        const dimScore = scoreFromDiff(diff);
-        const label = QUESTION_META[qKey]?.label || qKey;
-
-        dimensions.push({
-          key: qKey,
-          label,
-          userValue,
-          wgValue,
-          diff,
-          cls,
-          dimScore
-        });
-      });
-
-      if (!dimensions.length) {
-        overallScoreEl.textContent = "--";
-        overallLabelEl.textContent = "Noch keine Daten";
-        statusEl.textContent =
-          "Keine auswertbaren Antworten gefunden. Bitte fülle den Fragebogen vollständig aus.";
-        resetCircleClasses();
-        return;
-      }
-
-      const sum = dimensions.reduce((acc, d) => acc + d.dimScore, 0);
-      const overallScore = Math.round(sum / dimensions.length);
-      overallScoreEl.textContent = overallScore;
-      overallLabelEl.textContent = labelForOverall(overallScore);
-
-      resetCircleClasses();
-      const overallClass = classForOverall(overallScore);
-      if (overallClass) {
-        overallCircleEl.classList.add(
-          `wg-widget__overall-circle--${overallClass}`
-        );
-      }
-
-      dimensionListEl.innerHTML = "";
-
-      dimensions.forEach((dim) => {
-        const li = document.createElement("li");
-        li.className = `dimension dimension--${dim.cls}`;
-
-        li.innerHTML = `
-          <div class="dimension__top">
-            <span class="dimension__label">${dim.label}</span>
-          </div>
-          <div class="dimension__line">
-            <span class="dimension__side-label">
-              <span class="role-dot role-dot--user"></span>
-              Du: ${dim.userValue}
-            </span>
-            <div class="dimension__track">
-              <div class="dimension__track-base"></div>
-              <div class="dimension__segment"></div>
-              <div class="dimension__marker dimension__marker--user" title="Dein Wert"></div>
-              <div class="dimension__marker dimension__marker--wg" title="WG-Wert"></div>
-            </div>
-            <span class="dimension__side-label">
-              WG: ${dim.wgValue}
-              <span class="role-dot role-dot--wg"></span>
-            </span>
-          </div>
-        `;
-
-        const markerUser = li.querySelector(".dimension__marker--user");
-        const markerWg = li.querySelector(".dimension__marker--wg");
-        const segment = li.querySelector(".dimension__segment");
-
-        const userPos = valueToPercent(dim.userValue);
-        const wgPos = valueToPercent(dim.wgValue);
-
-        const leftPos = Math.min(userPos, wgPos);
-        const width = Math.abs(userPos - wgPos);
-
-        requestAnimationFrame(() => {
-          markerUser.style.left = `${userPos}%`;
-          markerWg.style.left = `${wgPos}%`;
-          segment.style.left = `${leftPos}%`;
-          segment.style.width = `${width}%`;
-        });
-
-        dimensionListEl.appendChild(li);
-      });
+        "Bitte fülle zuerst den Profilfragebogen aus. Danach aktualisiert sich dieser Bereich automatisch.";
     }
+
+    resetCircleClasses();
+    dimensionListEl.innerHTML = "";
+    return;
+  }
+
+  // We have data
+  if (statusEl) statusEl.textContent = "";
+
+  const dimensions = [];
+
+  Object.keys(WG_PROFILE.values).forEach((qKey) => {
+    const userValueRaw = answers[qKey];
+    if (typeof userValueRaw !== "number") return;
+
+    const userValue = userValueRaw;
+    const wgValue = WG_PROFILE.values[qKey];
+    const diff = Math.abs(userValue - wgValue);
+    const cls = classifyDifference(diff);
+    const dimScore = scoreFromDiff(diff);
+    const label = QUESTION_META[qKey]?.label || qKey;
+
+    dimensions.push({
+      key: qKey,
+      label,
+      userValue,
+      wgValue,
+      diff,
+      cls,
+      dimScore
+    });
+  });
+
+  if (!dimensions.length) {
+    if (overallScoreEl) overallScoreEl.textContent = "--";
+    if (overallLabelEl) overallLabelEl.textContent = "Noch keine Daten";
+
+    if (statusEl) {
+      statusEl.textContent =
+        "Keine auswertbaren Antworten gefunden. Bitte fülle den Fragebogen vollständig aus.";
+    }
+
+    resetCircleClasses();
+    dimensionListEl.innerHTML = "";
+    return;
+  }
+
+  // Overall score still computed, but only written if those elements exist
+  const sum = dimensions.reduce((acc, d) => acc + d.dimScore, 0);
+  const overallScore = Math.round(sum / dimensions.length);
+
+  if (overallScoreEl) overallScoreEl.textContent = overallScore;
+  if (overallLabelEl) overallLabelEl.textContent = labelForOverall(overallScore);
+
+  resetCircleClasses();
+  const overallClass = classForOverall(overallScore);
+  if (overallCircleEl && overallClass) {
+    overallCircleEl.classList.add(`wg-widget__overall-circle--${overallClass}`);
+  }
+
+  // Render dimension rows
+  dimensionListEl.innerHTML = "";
+
+  dimensions.forEach((dim) => {
+    const li = document.createElement("li");
+    li.className = `dimension dimension--${dim.cls}`;
+
+    // Note: pill removed here (dimension__tag) — only label remains
+    li.innerHTML = `
+      <div class="dimension__top">
+        <span class="dimension__label">${dim.label}</span>
+      </div>
+      <div class="dimension__line">
+        <span class="dimension__side-label">
+          <span class="role-dot role-dot--user"></span>
+          Du: ${dim.userValue}
+        </span>
+        <div class="dimension__track">
+          <div class="dimension__track-base"></div>
+          <div class="dimension__segment"></div>
+          <div class="dimension__marker dimension__marker--user" title="Dein Wert"></div>
+          <div class="dimension__marker dimension__marker--wg" title="WG-Wert"></div>
+        </div>
+        <span class="dimension__side-label">
+          WG: ${dim.wgValue}
+          <span class="role-dot role-dot--wg"></span>
+        </span>
+      </div>
+    `;
+
+    const markerUser = li.querySelector(".dimension__marker--user");
+    const markerWg = li.querySelector(".dimension__marker--wg");
+    const segment = li.querySelector(".dimension__segment");
+
+    const userPos = valueToPercent(dim.userValue);
+    const wgPos = valueToPercent(dim.wgValue);
+
+    const leftPos = Math.min(userPos, wgPos);
+    const width = Math.abs(userPos - wgPos);
+
+    requestAnimationFrame(() => {
+      if (markerUser) markerUser.style.left = `${userPos}%`;
+      if (markerWg) markerWg.style.left = `${wgPos}%`;
+      if (segment) {
+        segment.style.left = `${leftPos}%`;
+        segment.style.width = `${width}%`;
+      }
+    });
+
+    dimensionListEl.appendChild(li);
+  });
+}
+
+
+    
 
     document.addEventListener("DOMContentLoaded", renderWidget);
   </script>
