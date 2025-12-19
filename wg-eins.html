@@ -894,31 +894,7 @@
           </p>
         </header>
 
-        <div class="wg-widget__overall">
-          <div class="wg-widget__overall-circle">
-            <span id="overallScore" class="wg-widget__overall-value">--</span>
-            <span class="wg-widget__overall-unit">%</span>
-          </div>
-          <div id="overallLabel" class="wg-widget__overall-label">
-            Noch keine Daten
-          </div>
-        </div>
-
-        <div class="wg-widget__legend">
-          <span class="legend-item">
-            <span class="legend-dot legend-dot--strong"></span>
-            starker Match
-          </span>
-          <span class="legend-item">
-            <span class="legend-dot legend-dot--medium"></span>
-            neutral
-          </span>
-          <span class="legend-item">
-            <span class="legend-dot legend-dot--weak"></span>
-            Konfliktpotenzial
-          </span>
-        </div>
-
+       
         <ul id="dimensionList" class="wg-widget__dimensions">
           <!-- per-dimension rows will be injected here -->
         </ul>
@@ -1272,7 +1248,6 @@
         li.innerHTML = `
           <div class="dimension__top">
             <span class="dimension__label">${dim.label}</span>
-            <span class="dimension__tag">${labelForClass(dim.cls)}</span>
           </div>
           <div class="dimension__line">
             <span class="dimension__side-label">
